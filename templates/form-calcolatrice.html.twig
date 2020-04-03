@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title> Form calcolatrice</title>
+    <!-- UIkit CSS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/uikit@3.3.7/dist/css/uikit.min.css" />
+
+    <!-- UIkit JS -->
+    <script src="https://cdn.jsdelivr.net/npm/uikit@3.3.7/dist/js/uikit.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/uikit@3.3.7/dist/js/uikit-icons.min.js"></script>
+</head>
+
+<body>
+    <div class="uk-container uk-container-xsmall">
+        <h1> Form calcolatrice</h1>
+        <div>
+            {{nome}}
+        </div>
+        {{ form_start(form) }}
+
+        <div class="uk-form-stacked">
+            <div class="col">
+                {% block form_row %}
+
+
+                <div>
+                    {{- form_label(form.input1) -}}
+                    {{- form_widget(form.input1, {'attr': {'class': 'uk-input'}}) -}}
+                    {% if not form.vars.valid %}
+                    <div class="uk-alert-danger" uk-alert>
+                        <a class="uk-alert-close" uk-close></a>
+                        <p>{{- form_errors(form.input1) -}}</p>
+                    </div>
+                    {% endif %}
+                </div>
+                <div>
+                    {{- form_label(form.input2) -}}
+                    {{- form_widget(form.input2, {'attr': {'class': 'uk-input'}}) -}}
+                    {% if not form.vars.valid %}
+                    <div class="uk-alert-danger" uk-alert>
+                        <a class="uk-alert-close" uk-close></a>
+                        <p>{{- form_errors(form.input2) -}}</p>
+                    </div>
+                    {% endif %}
+                </div>
+
+
+                {% endblock %}
+
+
+            </div>
+
+            <div class="col">
+                {{ form_row(form.operazione, {'attr':{'class':'uk-select'}}) }}
+            </div>
+            <div>
+                {{ form_row(form.calcola, {'attr':{'class':'uk-button uk-button-default'}})}}
+            </div>
+        </div>
+        {{ form_end(form) }}
+        {% if result !="" %}
+        <h3>Risultato: {{result}}</h3>
+
+        {% endif %}
+        <br />
+        <a class="uk-button uk-button-default" href="calcolatrice">nuovo calcolo</a>
+        <a class="uk-button uk-button-default" href="calcolatrice?clearStorico=true">cancella storico</a>
+        <ul uk-accordion>
+            <li>
+                <a class="uk-accordion-title" href="#">Storico operazioni</a>
+                <div class="uk-accordion-content">
+                    {% if dati is empty %}
+                    <h4>storico vuoto</h4>
+                    {% endif %}
+                    {% if dati is not empty %}
+                      <table class="uk-table uk-table-striped uk-table-hover">
+                        <caption></caption>
+                        <thead>
+                            <tr>
+                                <th>Primo input</th>
+                                <th>Secondo input</th>
+                                <th>Tipo operazione</th>
+                                <th>Risultato</th>
+                                <th>Ritorna a operazione</th>
+
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for item in dati %}
+                            <tr>
+                                <td>{{ item.getinput1() }}</td>
+                                <td>{{ item.getinput2() }}</td>
+                                <td>{{ item.getoperazione() }}</td>
+                                <td>{{ item.getResult() }}</td>
+                                <td><a href="calcolatrice?{{ item.toString() }}" uk-icon="refresh"></a></td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                    {% endif %}
+                  
+                </div>
+            </li>
+        </ul>
+
+    </div>
+</body>
+
+</html>

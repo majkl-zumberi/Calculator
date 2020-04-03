@@ -1,0 +1,3 @@
+calc_form:
+    path: /calcolatrice
+    controller: App\Controller\FormCalcolatriceController::formCalc
